@@ -10,7 +10,7 @@ class Computer():
         loc = move.location #move is a square object
         
         if loc[0] == 4:
-            score+=10
+            score+=50
         elif loc[0] == 5:
             score+=1000
 
@@ -29,6 +29,11 @@ class Computer():
             if square.occupiedPiece != None:
                 if square.occupiedPiece.isBlack == False and loc != square.location:
                     score -= 900
+        
+        for square in self.squares[2]:
+            if square.occupiedPiece != None:
+                if square.occupiedPiece.isBlack == False and loc != square.location:
+                    score -= 30
         
         return score
 

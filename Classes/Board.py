@@ -91,21 +91,22 @@ class Board():
         if not self.turn:
             clickedSquare = self.getSquare(mx,my)
 
-            if clickedSquare.occupiedPiece != None and clickedSquare.occupiedPiece.isBlack == self.turn :
-                for row in self.squares:
-                    for square in row:
-                        square.isHighlight = False
+            if clickedSquare != None:
+                if clickedSquare.occupiedPiece != None and clickedSquare.occupiedPiece.isBlack == self.turn :
+                    for row in self.squares:
+                        for square in row:
+                            square.isHighlight = False
 
-                if clickedSquare.occupiedPiece.isBlack ==  self.turn:
-                    self.selectedPiece = clickedSquare.occupiedPiece
+                    if clickedSquare.occupiedPiece.isBlack ==  self.turn:
+                        self.selectedPiece = clickedSquare.occupiedPiece
 
-            elif clickedSquare.isHighlight:
-                if clickedSquare.occupiedPiece != None:
+                elif clickedSquare.isHighlight and self.selectedPiece != None:
                     self.selectedPiece.move(self,clickedSquare)
                 else:
-                    self.selectedPiece.move(self,clickedSquare)
-            else:
-                self.selectedPiece = None
+                    for row in self.squares:
+                        for square in row:
+                            square.isHighlight = False
+                    self.selectedPiece = None
         
     def isWin(self) -> str or bool:
         """Checks for wining states. Returns False or Winners color as string"""
