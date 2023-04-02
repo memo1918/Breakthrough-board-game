@@ -1,6 +1,7 @@
 import pygame
 from Classes.Board import Board
 from Classes.Button import Button
+from Classes.Computer import Computer
 import sys
 
 pygame.init()
@@ -15,7 +16,9 @@ def play():
     """Function that runs the game."""
 
     board = Board(720,720)
-    board.startPos()        
+    board.startPos()
+    computer = Computer(board)        
+    
     while True:
         screen.fill((0))
         mx, my = pygame.mouse.get_pos()
@@ -31,6 +34,9 @@ def play():
                 if event.key == pygame.K_ESCAPE:
                     main_menu()
         
+        if board.turn == True:
+            board.computerMove(computer)
+
         board.draw(screen)
 
         result =board.isWin()

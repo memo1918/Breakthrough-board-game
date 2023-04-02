@@ -12,6 +12,12 @@ class Board():
         self.selectedPiece = None
         self.turn = False #true means black's turn
 
+    def copy(self):
+        copyBoard = Board(self.width,self.height,self.size,self.gap)
+        copyBoard.squares = self.squares.copy()
+        copyBoard.turn = self.turn
+        return copyBoard
+
     def boardCalc(self) -> list:
         """Calculates the square coordinates and sizes. Returns list containing coordinates, respect to width and height, and location."""
         coordinate = []
@@ -47,17 +53,6 @@ class Board():
         x = mx//self.increment_w
         return self.squares[y][x]
 
-    def draw(self,screen):
-        """Initiates draw sequence within Square objects."""
-        if self.selectedPiece != None:
-            for square in self.selectedPiece.posMoves(self):
-                square.isHighlight = True
-
-        for row in self.squares:
-            for square in row:
-                square.draw(screen)
-        
-
     def startPos(self):
         """Configures the Board to its start state with Piece objects."""
         for j in [0,1,-1,-2]:
@@ -67,26 +62,51 @@ class Board():
                 else:
                     square.occupiedPiece = Piece(False,square.location)
 
+    def draw(self,screen):
+        """Initiates draw sequence within Square objects."""
+        if self.selectedPiece != None:
+            for square in self.selectedPiece.posMoves(self):
+                square.isHighlight = True
+
+        for row in self.squares:
+            for square in row:
+                square.draw(screen)
+
+    def pieceUpdate(self):
+        self.blackPieces = []
+        self.whitePieces = []
+
+        for row in [-1,-2,0,1]:
+            for square in self.squares[row]:
+                if square.occupiedPiece != None:
+                    piece = square.occupiedPiece
+                    if piece.isBlack == True:
+                        self.blackPieces.append(piece)
+                    else:
+                        self.whitePieces.append(piece)
+
     def click(self,mx,my):
         """Handels mouse click on the game window."""
-        clickedSquare = self.getSquare(mx,my)
+        
+        if not self.turn:
+            clickedSquare = self.getSquare(mx,my)
 
-        if clickedSquare.occupiedPiece != None and clickedSquare.occupiedPiece.isBlack == self.turn :
-            for row in self.squares:
-                for square in row:
-                    square.isHighlight = False
+            if clickedSquare.occupiedPiece != None and clickedSquare.occupiedPiece.isBlack == self.turn :
+                for row in self.squares:
+                    for square in row:
+                        square.isHighlight = False
 
-            if clickedSquare.occupiedPiece.isBlack ==  self.turn:
-                self.selectedPiece = clickedSquare.occupiedPiece
+                if clickedSquare.occupiedPiece.isBlack ==  self.turn:
+                    self.selectedPiece = clickedSquare.occupiedPiece
 
-        elif clickedSquare.isHighlight:
-            if clickedSquare.occupiedPiece != None:
-                self.selectedPiece.move(self,clickedSquare)
+            elif clickedSquare.isHighlight:
+                if clickedSquare.occupiedPiece != None:
+                    self.selectedPiece.move(self,clickedSquare)
+                else:
+                    self.selectedPiece.move(self,clickedSquare)
             else:
-                self.selectedPiece.move(self,clickedSquare)
-        else:
-            self.selectedPiece = None
-       
+                self.selectedPiece = None
+        
     def isWin(self) -> str or bool:
         """Checks for wining states. Returns False or Winners color as string"""
         for square in self.squares[0]:
@@ -99,5 +119,17 @@ class Board():
                 if square.occupiedPiece.isBlack == True:
                     return "Black"     
         return False
-            
+    
+    def computerMove(self,computer):
+        self.pieceUpdate()
+        movesDict = {}
+
+        for piece in self.blackPieces:
+            if piece.posMoves():#check if it's empty
+                for move in piece.posMove():
+                    score = computer.score(move)
+                    movesDict[[piece,move]] = score
+                
+
+        self.turn = not self.turn
             
