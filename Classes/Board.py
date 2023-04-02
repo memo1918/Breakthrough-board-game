@@ -76,8 +76,8 @@ class Board():
         self.blackPieces = []
         self.whitePieces = []
 
-        for row in [-1,-2,0,1]:
-            for square in self.squares[row]:
+        for row in self.squares:
+            for square in row:
                 if square.occupiedPiece != None:
                     piece = square.occupiedPiece
                     if piece.isBlack == True:
@@ -125,11 +125,13 @@ class Board():
         movesDict = {}
 
         for piece in self.blackPieces:
-            if piece.posMoves():#check if it's empty
-                for move in piece.posMove():
+            if piece.posMoves(self): #check if it's empty
+                for move in piece.posMoves(self): #move is a square object
                     score = computer.score(move)
-                    movesDict[[piece,move]] = score
-                
+                    movesDict[(piece,move)] = score
+        moveslist = sorted(movesDict.items(), key=lambda item: item[1],reverse=True)
+        
+        computer.move(moveslist[0][0])
 
-        self.turn = not self.turn
+        
             
