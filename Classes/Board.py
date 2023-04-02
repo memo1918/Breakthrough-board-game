@@ -1,5 +1,5 @@
-from Square import Square
-from Piece import Piece
+from .Square import Square
+from .Piece import Piece
 
 class Board():
     def __init__(self,width,height,size = 6,gap = 0):
