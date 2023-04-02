@@ -10,6 +10,7 @@ class Square():
         self.location = location #location(y,x)
         self.occupiedPiece =  None
         self.isHighlight = False
+        self.pieceRadius = int((self.width/2)-(0.1*self.width))
 
         self.rect = Rect(self.x,self.y,width,height)
         self.color = (209, 139, 71) if (location[0] + location[1]) % 2 == 0 else (255, 206, 158)				 
@@ -34,7 +35,8 @@ class Square():
             draw.rect(screen,self.color,self.rect)
 
         if self.occupiedPiece != None:
+
             if self.occupiedPiece.isBlack:
-                draw.circle(screen,center = self.getCenter(),radius = 40, color= "black")
+                draw.circle(screen,center = self.getCenter(),radius = self.pieceRadius, color= "black")
             else:
-                draw.circle(screen,center = self.getCenter(),radius = 40, color= "white")
+                draw.circle(screen,center = self.getCenter(),radius = self.pieceRadius, color= "white")

@@ -5,16 +5,16 @@ class Computer():
         self.squares = self.board.squares
         
     def score(self,move)->int:
-        """Calculates the score of possible move and returns as intiger."""
+        """Calculates the score of possible move and returns as intiger. Its the heuristic function of the game."""
         score = 0
         loc = move.location #move is a square object
         
-        if loc[0] == 4:
+        if loc[0] == self.board.size-2:
             score+=50
-        elif loc[0] == 5:
+        elif loc[0] ==  self.board.size-1:
             score+=1000
 
-        if loc[0] != 5:
+        if loc[0] != self.board.size-1:
             for i in [1,-1]:
                 if loc[1]+i < 0 or loc[1]+i > self.board.size-1: 
                     continue
@@ -37,7 +37,17 @@ class Computer():
         
         return score
 
-    def move(self,moveTuple):
+    def move(self):
+        movesDict = {}
+
+        for piece in self.board.blackPieces:
+            if piece.posMoves(self): #check if it's empty
+                for move in piece.posMoves(self): #move is a square object
+                    score = self.score(move)
+                    movesDict[(piece,move)] = score
+        moveslist = sorted(movesDict.items(), key=lambda item: item[1],reverse=True) #(((piece,square),score),...)
+
+        moveTuple = moveslist[0][0]
         piece = moveTuple[0]
         targetSquare = moveTuple[1]
 

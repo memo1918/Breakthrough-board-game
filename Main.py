@@ -15,7 +15,7 @@ font = pygame.font.SysFont("arialblack", 40)
 def play(turn):
     """Function that runs the game."""
 
-    board = Board(720,720)
+    board = Board(screenSize,screenSize,size = 6)#size can be modified
     board.startPos()
     computer = Computer(board)
     if turn == "first":

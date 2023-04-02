@@ -123,16 +123,7 @@ class Board():
     
     def computerMove(self,computer):
         self.pieceUpdate()
-        movesDict = {}
-
-        for piece in self.blackPieces:
-            if piece.posMoves(self): #check if it's empty
-                for move in piece.posMoves(self): #move is a square object
-                    score = computer.score(move)
-                    movesDict[(piece,move)] = score
-        moveslist = sorted(movesDict.items(), key=lambda item: item[1],reverse=True)
-        
-        computer.move(moveslist[0][0])
+        computer.move()
 
         
             
