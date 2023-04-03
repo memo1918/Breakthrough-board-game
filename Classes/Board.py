@@ -2,15 +2,17 @@ from .Square import Square
 from .Piece import Piece
 
 class Board():
-    def __init__(self,width,height,size = 6,gap = 0):
+    def __init__(self,width,height,size = 6,gap = 0,genSquares = True):
         """Board init."""
         self.width = width
         self.height = height
         self.gap = gap
         self.size = size
-        self.squares = self.genSquares()
         self.selectedPiece = None
         self.turn = False #true means black's turn
+
+        if genSquares:self.squares = self.genSquares()
+        else: self.squares = None
 
     def copy(self):
         copyBoard = Board(self.width,self.height,self.size,self.gap)
