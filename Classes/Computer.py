@@ -13,14 +13,13 @@ class Computer():
         """Function that initiates the hole moving sequence."""
 
         movesDict = {}
-        copyBoard = self.getCopy(self.board)
-        #piece = copyboard.squares[realPiece.location[0]][realPiece.location[1]].occupiedPiece
         for piece in self.board.blackPieces:
             if piece.posMoves(self.board): #check if it's empty
                 for move in piece.posMoves(self.board): #move is a square object
-
+                    
+                    copyBoard = self.getCopy(self.board)
                     copySquare = copyBoard.squares[move.location[0]][move.location[1]]
-                    copyPiece = copySquare.occupiedPiece
+                    copyPiece = copyBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece#being none
                     
                     score = self.score_move(copyBoard,copySquare,copyPiece,depth)
                     movesDict[(piece,move)] = score
@@ -37,7 +36,7 @@ class Computer():
     def score_move(self,copyBoard,move,piece,dept) -> int:
         """Returns the final score."""
         piece.move(copyBoard,move)
-        score = self.minmax(move,dept-1,copyBoard)
+        score = self.minmax(move,copyBoard,dept-1,False)
         return score
 
     def minmax(self,square,board,dept,maximizingComputer) -> int:
@@ -56,13 +55,13 @@ class Computer():
             
             nextSquare = nextBoard.squares[square.location[0]][square.location[1]]
             nextPiece = nextSquare.occupiedPiece
-            for move in nextPiece.posMoves():
+            for move in nextPiece.posMoves(nextBoard):
                 # move is a square, and will not be same with the copy 
                 # so we have to find this square in the copy board
 
                 nextnextBoard = self.getCopy(nextBoard)
                 nextnextSquare = nextnextBoard.squares[nextSquare.location[0]][nextSquare.location[1]]
-                nextnextPiece = nextnextSquare.occupiedPiece  
+                nextnextPiece = nextnextBoard.squares[nextPiece.location[0]][nextPiece.location[1]].occupiedPiece
                 move = nextnextBoard.squares[move.location[0]][move.location[1]]
 
                 nextnextPiece.move(nextnextBoard,move)
@@ -74,10 +73,11 @@ class Computer():
             value = +(10**10)
             nextBoard.pieceUpdate()
             for piece in nextBoard.whitePieces:
-                for move in piece.posMoves():
+                for move in piece.posMoves(nextBoard):
                     nextnextBoard = self.getCopy(nextBoard)
-                    nextnextSquare = nextnextBoard.squares[nextSquare.location[0]][nextSquare.location[1]]
-                    nextnextPiece = nextnextSquare.occupiedPiece  
+                    nextnextSquare = nextnextBoard.squares[move.location[0]][move.location[1]]
+                    nextnextPiece = nextnextBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
+
                     move = nextnextBoard.squares[move.location[0]][move.location[1]]
 
                     nextnextPiece.move(nextnextBoard,move)
@@ -159,7 +159,7 @@ class Computer():
                 temp = Square(square.x,square.y,square.width,square.height,square.location)
                 if square.occupiedPiece != None:
                     temp.occupiedPiece = Piece(square.occupiedPiece.isBlack,square.occupiedPiece.location)
-                copySquares.append(temp)
+                copySquares[-1].append(temp)
         
         copyBoard = Board(board.width,board.height,board.size,board.gap,genSquares=False)
         copyBoard.squares = copySquares
