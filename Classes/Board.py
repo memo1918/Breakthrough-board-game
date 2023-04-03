@@ -125,7 +125,7 @@ class Board():
     
     def computerMove(self,computer):
         self.pieceUpdate()
-        computer.move()
+        computer.move(3)
 
         
             
