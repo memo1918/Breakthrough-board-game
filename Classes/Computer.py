@@ -26,7 +26,7 @@ class Computer():
                     score = self.score_move(copyBoard,copySquare,copyPiece,depth)
                     movesDict[(piece,move)] = score
         
-        #print(self.something)
+        #
         #moveslist = sorted(movesDict.items(), key=lambda item: item[1],reverse=True) #(((piece,square),score),...)
         
         max_cols = [key for key in movesDict.keys() if movesDict[key] == max(movesDict.values())]
@@ -34,6 +34,7 @@ class Computer():
         moveTuple = choice(max_cols)
         piece = moveTuple[0]
         targetSquare = moveTuple[1]
+        #print(self.something.count(True))
 
         for key in movesDict:
             print("Piece Location: ",key[0].location," Score: ",movesDict[key]," Move Location: ",key[1].location," Made" if key[0]==piece and key[1]==targetSquare  else "")
@@ -44,19 +45,38 @@ class Computer():
     def score_move(self,copyBoard,move,piece,dept) -> int:
         """Returns the final score."""
         piece.move(copyBoard,move)
-        self.something.append([])
         score = self.minmax(move,copyBoard,dept-1,False)
         return score
 
     def minmax(self,square,board,dept,maximizingComputer) -> int:
         """Min max algorithm."""
         
+        if maximizingComputer: turn = False
+        else: turn = True
+
         if dept == 0:
-            return self.heuristicFunction(board,square,maximizingComputer)
-        elif maximizingComputer and square.location[0] == self.board.size-1:
-            return self.heuristicFunction(board,square,maximizingComputer)
-        elif not maximizingComputer and square.location[0] == 0:
-            return self.heuristicFunction(board,square,maximizingComputer)
+            return self.heuristicFunction(board,square,turn)    
+        # elif square.occupiedPiece.isBlack and square.location[0] == self.board.size-1:
+        #     print("f")
+        #     return self.heuristicFunction(board,square,not maximizingComputer)
+        # elif not square.occupiedPiece.isBlack and square.location[0] == 0:
+        #     print("b")
+        #     return self.heuristicFunction(board,square,not maximizingComputer)
+        else:
+            if not turn:
+                for square in board.squares[board.size-1]:
+                    if square.occupiedPiece != None:
+                        if square.occupiedPiece.isBlack:
+                            return self.heuristicFunction(board,square,turn)
+            else :    
+                for square in board.squares[0]:
+                    if square.occupiedPiece != None:
+                        if not square.occupiedPiece.isBlack:
+                            return self.heuristicFunction(board,square,turn)
+                
+            
+                
+        
         
         nextBoard = self.getCopy(board)
         if maximizingComputer:
@@ -70,24 +90,8 @@ class Computer():
                     nextnextPiece = nextnextBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
 
                     nextnextPiece.move(nextnextBoard,nextnextSquare)
-                    value = max(value,self.minmax(nextnextSquare,nextnextBoard,dept-1,True))
+                    value = max(value,self.minmax(nextnextSquare,nextnextBoard,dept-1,False))
             return value 
-
-            # nextSquare = nextBoard.squares[square.location[0]][square.location[1]]
-            # nextPiece = nextSquare.occupiedPiece
-            # for move in nextPiece.posMoves(nextBoard):
-            #     # move is a square, and will not be same with the copy 
-            #     # so we have to find this square in the copy board
-
-            #     nextnextBoard = self.getCopy(nextBoard)
-            #     nextnextSquare = nextnextBoard.squares[nextSquare.location[0]][nextSquare.location[1]]
-            #     nextnextPiece = nextnextBoard.squares[nextPiece.location[0]][nextPiece.location[1]].occupiedPiece
-            #     move = nextnextBoard.squares[move.location[0]][move.location[1]]
-
-            #     nextnextPiece.move(nextnextBoard,move)
-            #     value = max(value,self.minmax(nextnextSquare,nextnextBoard,dept-1,False))
-            # return value 
-        
        
         else:
             #oppounent move
@@ -107,16 +111,13 @@ class Computer():
     def heuristicFunction(self,board,scoreSquare,turn) -> int:
         """Calculates the score of possible move and returns as intiger. Its the heuristic function of the game."""
         #has to work for bith players asn their benefit. 
-        #TODO: we shold not check the hole board.
 
         score = 0
         squares = board.squares
         piece = scoreSquare.occupiedPiece
         loc = piece.location
 
-        self.something[-1].append([loc,scoreSquare.location])
-        
-        # #checks the pieces that 1 move away from win.
+        """# #checks the pieces that 1 move away from win.
         # for square in squares[-2 if turn else 1]:
         #     if square.occupiedPiece != None:
         #         if square.occupiedPiece.isBlack == turn:
@@ -144,13 +145,12 @@ class Computer():
         #                         if diagPiece !=None:
         #                             if diagPiece.isBlack != turn:
         #                                 score -= 10
-        #                                 break 
+        #                                 break """
 
-        if loc[0] == (-2 if turn else 1):
-            print("i am here")
+        if loc[0] == (board.size-2 if turn else 1):
             score += 50
-        elif loc[0] ==  (-1 if turn else 0):
-            print("i am here2")
+        elif loc[0] == (board.size-1 if turn else 0):
+            print(loc)
             score += 10**4
         
         #checking tuns's side if there are any oppounent piece
@@ -163,7 +163,7 @@ class Computer():
             if square.occupiedPiece != None:
                 if square.occupiedPiece.isBlack != turn and loc != square.location:
                     score -= 10**3
-        
+
         return score
            
     def getCopy(self,board) -> Board:
