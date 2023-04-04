@@ -20,7 +20,7 @@ class Computer():
                     
                     copyBoard = self.getCopy(self.board)
                     copySquare = copyBoard.squares[move.location[0]][move.location[1]]
-                    copyPiece = copyBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece#being none
+                    copyPiece = copyBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
                     
                     score = self.score_move(copyBoard,copySquare,copyPiece,depth)
                     movesDict[(piece,move)] = score
@@ -49,13 +49,18 @@ class Computer():
     def minmax(self,square,board,dept,maximizingComputer) -> int:
         """Min max algorithm."""
         
-        turn = maximizingComputer
+        #turn = not maximizingComputer
+        #when turn is not maximizingComputer, AI gets points for win 
+        #when turn is maximizingComputer, AI can prevent oppunent win
+
         if dept == 0:
-            return self.heuristicFunction(board,turn)
+            return self.heuristicFunction(board,True)
         elif board.isWin() == "White":
-            return self.heuristicFunction(board,turn)
+            print("white",dept,maximizingComputer)
+            return self.heuristicFunction(board,dept%2)
         elif board.isWin() == "Black":
-            return self.heuristicFunction(board,turn)
+            print("black",dept,maximizingComputer)
+            return self.heuristicFunction(board,dept%2)
 
 
         nextBoard = self.getCopy(board)
