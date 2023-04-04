@@ -10,6 +10,7 @@ screenSize = 720
 clock = pygame.time.Clock()
 clock.tick(30)
 screen = pygame.display.set_mode((screenSize, screenSize))
+
 font = pygame.font.SysFont("arialblack", 40)
 
 def play(turn):
@@ -99,6 +100,7 @@ def main_menu():
     """Function that runs Main Menu."""
     while True:
         screen.fill((0))
+
 
         mouse_pos = pygame.mouse.get_pos()
 
