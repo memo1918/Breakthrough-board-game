@@ -14,11 +14,7 @@ class Board():
         if genSquares:self.squares = self.genSquares()
         else: self.squares = None
 
-    def copy(self):
-        copyBoard = Board(self.width,self.height,self.size,self.gap)
-        copyBoard.squares = self.squares.copy()
-        copyBoard.turn = self.turn
-        return copyBoard
+
 
     def boardCalc(self) -> list:
         """Calculates the square coordinates and sizes. Returns list containing coordinates, respect to width and height, and location."""

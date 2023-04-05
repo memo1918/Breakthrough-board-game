@@ -45,12 +45,13 @@ def play(turn):
 
         board.draw(screen)
 
+        pygame.display.update()
+        
         result =board.isWin()
         if result != False:
             print(result,"Wins!!")
+            pygame.time.delay(1000)
             break
-
-        pygame.display.update()
 
 def about():
     """Function that runs about/how to play page"""
