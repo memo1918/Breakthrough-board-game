@@ -8,7 +8,7 @@ class Square():
         self.width = width
         self.height = height
         self.location = location #location(y,x)
-        self.occupiedPiece =  None
+        self.occupiedPiece = None
         self.isHighlight = False
         self.pieceRadius = int((self.width/2)-(0.1*self.width))
 

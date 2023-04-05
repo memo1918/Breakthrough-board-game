@@ -122,6 +122,3 @@ class Board():
     def computerMove(self,computer):
         self.pieceUpdate()
         computer.move(3)
-
-        
-            

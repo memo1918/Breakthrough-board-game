@@ -66,26 +66,28 @@ class Computer():
             value = -(10**8)
             
             for piece in nextBoard.blackPieces:
-                for move in piece.posMoves(nextBoard):
-                    nextnextBoard = self.getCopy(nextBoard)
-                    nextnextSquare = nextnextBoard.squares[move.location[0]][move.location[1]]
-                    nextnextPiece = nextnextBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
-                    nextnextPiece.move(nextnextBoard,nextnextSquare)
-                    
-                    value = max(value,self.minmax(nextnextSquare,nextnextBoard,depth-1,False))
+                if piece.posMoves(nextBoard):
+                    for move in piece.posMoves(nextBoard):
+                        nextnextBoard = self.getCopy(nextBoard)
+                        nextnextSquare = nextnextBoard.squares[move.location[0]][move.location[1]]
+                        nextnextPiece = nextnextBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
+                        nextnextPiece.move(nextnextBoard,nextnextSquare)
+                        
+                        value = max(value,self.minmax(nextnextSquare,nextnextBoard,depth-1,False))
             return value 
         
         else:
             #oppounent move
             value = +(10**8)
             for piece in nextBoard.whitePieces:
-                for move in piece.posMoves(nextBoard):
-                    nextnextBoard = self.getCopy(nextBoard)
-                    nextnextSquare = nextnextBoard.squares[move.location[0]][move.location[1]]
-                    nextnextPiece = nextnextBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
-                    nextnextPiece.move(nextnextBoard,nextnextSquare)
-                    
-                    value = min(value,self.minmax(nextnextSquare,nextnextBoard,depth-1,True))
+                if piece.posMoves(nextBoard):
+                    for move in piece.posMoves(nextBoard):
+                        nextnextBoard = self.getCopy(nextBoard)
+                        nextnextSquare = nextnextBoard.squares[move.location[0]][move.location[1]]
+                        nextnextPiece = nextnextBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
+                        nextnextPiece.move(nextnextBoard,nextnextSquare)
+                        
+                        value = min(value,self.minmax(nextnextSquare,nextnextBoard,depth-1,True))
             return value 
 
     def heuristicFunction(self,board,depth) -> int:
@@ -166,8 +168,4 @@ class Computer():
         copyBoard.turn = board.turn
         copyBoard.squares = copySquares
         return copyBoard
-
-
-        
-
 
