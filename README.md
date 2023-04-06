@@ -4,7 +4,7 @@ It is Breakthrough board game made with pygame python.
 
 Game has basic AI to play with it. Player can choose to start first or second.
 ## Important notice
-The file "Buttons.py" is taken from user [@baraltech](https://github.com/baraltech) repository [Menu-System-PyGame](https://github.com/baraltech/Menu-System-PyGame).
+The file "Button.py" is taken from user [@baraltech](https://github.com/baraltech) repository [Menu-System-PyGame](https://github.com/baraltech/Menu-System-PyGame).
 He also has a video talking about how it works [here](https://www.youtube.com/watch?v=GMBqjxcKogA&t=177s).
 
 ## Game rules
