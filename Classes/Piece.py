@@ -13,6 +13,7 @@ class Piece():
             contains row and column values
     
     """
+    
     def __init__(self,isBlack: bool, location: tuple):
         """
         Constructs all the necessary attributes for the Piece object.

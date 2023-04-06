@@ -5,13 +5,42 @@ from random import choice
 
 
 class Computer():
-    def __init__(self,board):
-        """Computer init."""
+    """
+    A class to represent Computer.
+
+    ...
+
+    Attributes
+    ----------
+    board : Board
+            board object to play on
+
+    squares : list
+            contains all squares. squares[row][column]
+    
+    """
+
+    def __init__(self, board: Board):
+        """
+        Constructs all the necessary attributes for the Computer object.
+
+        Parameters
+        ----------
+        board : Board
+                board object to play on
+        """
+
         self.board = board
         self.squares = self.board.squares
 
-    def move(self,depth):
-        """Function that initiates the hole moving sequence."""
+    def move(self, depth: int) -> None:
+        """
+        Function that initiates the hole moving sequence. Gets score for possible moves and makes one based on scores.
+        
+        Parameters:
+                depth (int): depth of N-step look ahead algorithm
+        
+        """
 
         movesDict = {}
         for piece in self.board.blackPieces:
@@ -24,8 +53,6 @@ class Computer():
                     
                     score = self.score_move(copyBoard,copySquare,copyPiece,depth)
                     movesDict[(piece,move)] = score
-
-        #moveslist = sorted(movesDict.items(), key=lambda item: item[1],reverse=True) #(((piece,square),score),...)
         
         max_cols = [key for key in movesDict.keys() if movesDict[key] == max(movesDict.values())]
 
@@ -39,15 +66,48 @@ class Computer():
         
         piece.move(self.board,targetSquare)
 
-    def score_move(self,copyBoard,move,piece,dept) -> int:
-        """Returns the final score."""
+    def score_move(self, copyBoard: Board, move: Square, piece: Piece, dept: int) -> int:
+        """
+        Initiates the minmax function.
+        
+        Parameters:
+                copyBoard (Board): Board object to make(more like imitate) the move
+
+                move (Square): target square to piece to go
+
+                piece (Piece): Piece object to move
+
+                depth (int): depth of N-step look ahead algorithm
+
+        Returns:
+                score (int): score of the given move of the piece
+
+        """
+
         copyBoard.turn = True
         piece.move(copyBoard,move)
         score = self.minmax(copyBoard,dept-1,False)
         return score
 
-    def minmax(self,board,depth,maximizingComputer) -> int:
-        """Min max algorithm."""
+    def minmax(self, board: Board, depth: int, maximizingComputer: bool) -> int:
+        """
+        Min max algorithm. Calls back itself until depth is 0 or there is a winning case in the given board.
+        
+        Parameters:
+                copyBoard (Board): Board object to make(more like imitate) the move
+
+                depth (int): depth of N-step look ahead algorithm
+
+                maximizingComputer (bool): MAX if True Min if False
+
+        Returns:
+                value (int): score based on MIN or MAX
+
+                OR
+
+                heuristicFunction() -> (int): calculates the score of the given board
+        
+        """
 
         if depth == 0:
             return self.heuristicFunction(board,depth)
@@ -59,8 +119,9 @@ class Computer():
 
         nextBoard = self.getCopy(board)
         nextBoard.pieceUpdate()
+
+        #MAX
         if maximizingComputer:
-            #we should check every piece
             value = -(10**8)
             
             for piece in nextBoard.blackPieces:
@@ -74,8 +135,8 @@ class Computer():
                         value = max(value,self.minmax(nextnextBoard,depth-1,False))
             return value 
         
+        #MIN
         else:
-            #oppounent move
             value = +(10**8)
             for piece in nextBoard.whitePieces:
                 if piece.posMoves(nextBoard):
@@ -88,14 +149,25 @@ class Computer():
                         value = min(value,self.minmax(nextnextBoard,depth-1,True))
             return value 
 
-    def heuristicFunction(self,board,depth) -> int:
-        """Calculates the score of possible move and returns as intiger. Its the heuristic function of the game."""
-        #has to work for bith players asn their benefit. evaluate the current board state
+    def heuristicFunction(self, board: Board, depth: int) -> int:
+        """
+        Calculates the score of the given board. Its the heuristic function of the game.
+        
+        Parameters:
+                board (Board): Board object to analiyze
+
+                depth (int): depth of N-step look ahead algorithm
+
+        Returns:
+                score (int): total score of the given board
+
+        """
+
         score = 0
         board.pieceUpdate()
         depth = depth if depth>0 else 1
 
-        #plus
+        #Reward
         score += len(board.blackPieces)*10
 
         for piece in board.blackPieces:
@@ -106,7 +178,7 @@ class Computer():
             else:
                 score += piece.location[0]*10*depth
 
-        #minus
+        #Punishment
         score -= len(board.whitePieces)*10
 
         for square in board.squares[0]:
@@ -121,8 +193,16 @@ class Computer():
 
         return score
            
-    def getCopy(self,board) -> Board:
-        """Return copy of the given board."""
+    def getCopy(self, board: Board) -> Board:
+        """
+        Return copy of the given board. This function creates exact coppies of Board, Square and Piece objects by creating new ones
+        
+        Parameters:
+                board (Board): board to copy
+
+        Returns:
+                copyBoard (Board): copy of the given board
+        """
         copySquares = []
         
         for row in board.squares:
@@ -137,4 +217,3 @@ class Computer():
         copyBoard.turn = board.turn
         copyBoard.squares = copySquares
         return copyBoard
-

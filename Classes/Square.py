@@ -38,6 +38,7 @@ class Square():
     rect : Rect
             pygame.Rect object contains information to draw square 
     """
+    
     def __init__(self,x: int, y: int, width: int, height: int, location: tuple):
         """
         Constructs all the necessary attributes for the Square object.

@@ -40,6 +40,7 @@ class Board():
             all white pieces on the board
 
     """
+    
     def __init__(self, width: int, height: int, size: int, genSquares: bool = True):
         """
         Constructs all the necessary attributes for the Board object.
