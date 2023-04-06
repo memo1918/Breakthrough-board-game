@@ -4,8 +4,13 @@ from Classes.Button import Button
 from Classes.Computer import Computer
 import sys,getopt
 
-def play(turn: str):
-    """Function that runs the game."""
+def play(turn: str) -> None:
+    """
+    Function that runs the game.
+
+    Parameters:
+        turn (str): who will start the game.
+    """
 
     board = Board(resolution,resolution,size)
     board.depth = depth
@@ -45,10 +50,26 @@ def play(turn: str):
             pygame.time.delay(1000)
             break
 
-def about():
-    """Function that runs about/how to play page"""
-    def text_seperator(text,x,y)->list:
-        """Function that seperates the text by lines and return a list"""
+def about() -> None:
+    """
+    Function that runs about/how to play page
+    """
+
+    def text_seperator(text: str, x: int, y: int )-> list:
+        """
+        Seperates the text by lines and return a list
+
+        Parameters:
+                text (str): string to seperate
+
+                x (int): x coordinate of the start possition of text
+
+                y (int): y coordinate of the start possition of text
+
+        Returns:
+                lines (list): contains each line
+        """
+
         lines = []
         text_font = pygame.font.SysFont("arialblack", fontSize//2)
         for line in text.splitlines():
@@ -89,8 +110,11 @@ def about():
                     break
         pygame.display.update()
 
-def main_menu():
-    """Function that runs Main Menu."""
+def main_menu() -> None:
+    """
+    Function that runs Main Menu.
+    """
+
     while True:
         screen.fill((0))
 
@@ -126,6 +150,7 @@ def main_menu():
                     sys.exit()
 
         pygame.display.update()
+
 
 if __name__ == "__main__":
     pygame.init()
