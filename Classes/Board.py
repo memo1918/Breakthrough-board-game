@@ -42,7 +42,7 @@ class Board():
     """
     def __init__(self, width: int, height: int, size: int, genSquares: bool = True):
         """
-        Constructs all the necessary attributes for the board object.
+        Constructs all the necessary attributes for the Board object.
 
         Parameters
         ----------
@@ -71,7 +71,7 @@ class Board():
         Calculates the square coordinates and sizes. Returns list containing coordinates, respect to width and height, and location.
 
         Returns:
-                coordinate (list): Contains x,y coordinate and location for each square (x,y(location))
+                coordinate (list): Contains x,y coordinate and location for each square (x,y(row,column))
         '''
         
         coordinate = []
@@ -83,7 +83,7 @@ class Board():
         for i in range(self.size):
             x = 0
             for j in range(self.size):
-                coordinate.append((x,y,(i,j)))#location(y,x)
+                coordinate.append((x,y,(i,j)))#location(row,column)
                 x+=self.increment_w
             y+=self.increment_h
         return coordinate
