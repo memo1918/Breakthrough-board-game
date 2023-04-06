@@ -7,7 +7,7 @@ import sys,getopt
 def play(turn: str):
     """Function that runs the game."""
 
-    board = Board(resolution,resolution,size)#size can be modified
+    board = Board(resolution,resolution,size)
     board.depth = depth
     board.startPos()
     computer = Computer(board)

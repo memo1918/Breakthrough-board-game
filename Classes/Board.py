@@ -5,19 +5,42 @@ class Board():
     """
     A class to represent game board.
 
+    ...
+
     Attributes
     ----------
     width : int
-        width of the board
+            width of the board
+
     height : int
-        height of the board
+            height of the board
+
     size : int
-        size of the board
-    genSquares: bool
-        if true, starts generating squares
+            size of the board
+
+    genSquares : bool
+            if true, starts generating squares
+
+    selectedPiece : Piece
+            Current selected piece
+
+    turn : bool
+            True if black's turn, False if white's turn
+
+    depth : int
+            depth of N-step look ahead algorithm
+
+    squares : list
+            contains all square objects. squares[row][column]
+
+    blackPieces : list
+            all black pieces on the board
+
+    whitePieces : list 
+            all white pieces on the board
 
     """
-    def __init__(self, width: int, height: int, size: int = 6, genSquares: bool = True):
+    def __init__(self, width: int, height: int, size: int, genSquares: bool = True):
         """
         Constructs all the necessary attributes for the board object.
 
@@ -43,14 +66,12 @@ class Board():
         if genSquares:self.squares = self.genSquares()
         else: self.squares = None
 
-
-
     def boardCalc(self) -> list:
         '''
         Calculates the square coordinates and sizes. Returns list containing coordinates, respect to width and height, and location.
 
-            Returns:
-                    coordinate (list): Contains x,y coordinate and location for each square (x,y(location))
+        Returns:
+                coordinate (list): Contains x,y coordinate and location for each square (x,y(location))
         '''
         
         coordinate = []
@@ -71,8 +92,8 @@ class Board():
         '''
         Generates squares based on boardCalc() return. Returns lists within list containing Square objects.
 
-            Returns:
-                    squares (list): Contains Square objects.
+        Returns:
+                squares (list): Contains Square objects.
         '''
         squares = []
         coordinates = self.boardCalc()
@@ -100,8 +121,10 @@ class Board():
         x = mx//self.increment_w
         return self.squares[y][x]
 
-    def startPos(self):
-        """Configures the Board to its start state with Piece objects."""
+    def startPos(self) -> None:
+        '''
+            Configures the Board to its start state with Piece objects.
+        '''
         for j in [0,1,-1,-2]:
             for square in self.squares[j]:
                 if j>=0:
@@ -109,8 +132,13 @@ class Board():
                 else:
                     square.occupiedPiece = Piece(False,square.location)
 
-    def draw(self,screen):
-        """Initiates draw sequence within Square objects."""
+    def draw(self,screen) -> None:
+        """
+        Initiates draw sequence within Square objects.
+        
+        Parameters:
+                screen (pygame.surface): window to draw
+        """
         if self.selectedPiece != None:
             for square in self.selectedPiece.posMoves(self):
                 square.isHighlight = True
@@ -119,8 +147,10 @@ class Board():
             for square in row:
                 square.draw(screen)
 
-    def pieceUpdate(self):
-        """Updates the list blackPieces and whitePieces."""
+    def pieceUpdate(self) -> None:
+        '''
+            Updates the list blackPieces and whitePieces.
+        '''
         self.blackPieces = []
         self.whitePieces = []
 
@@ -133,8 +163,14 @@ class Board():
                     else:
                         self.whitePieces.append(piece)
 
-    def click(self,mx,my):
-        """Handels mouse click on the game window."""
+    def click(self,mx,my) -> None:
+        '''
+            Handels mouse click on the game window.
+
+            Parameters:
+                    mx (int): x coordinate
+                    my (int): y coordinate
+         '''
         
         if not self.turn:
             clickedSquare = self.getSquare(mx,my)
@@ -157,7 +193,15 @@ class Board():
                     self.selectedPiece = None
         
     def isWin(self) -> str or bool:
-        """Checks for wining states. Returns False or Winners color as string"""
+        """
+        Checks for wining states. Returns False or Winners color as string.
+        
+        Returns:
+                'White' (str): if white is winning
+                'Black' (str): if black is winning
+                 False   (bool): no winning condition
+        
+        """
         for square in self.squares[0]:
             if square.occupiedPiece != None:
                 if square.occupiedPiece.isBlack == False:
@@ -174,7 +218,12 @@ class Board():
 
         return False
     
-    def computerMove(self,computer):
-        """Starts the computer's turn."""
+    def computerMove(self,computer) -> None:
+        '''
+            Starts the computer's turn.
+
+            Parameters:
+                computer (Computer): Computer object
+         '''
         self.pieceUpdate()
         computer.move(self.depth)
