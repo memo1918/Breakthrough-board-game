@@ -2,11 +2,39 @@ from .Square import Square
 from .Piece import Piece
 
 class Board():
-    def __init__(self,width,height,size = 6,gap = 0,genSquares = True):
-        """Board init."""
+    """
+    A class to represent game board.
+
+    Attributes
+    ----------
+    width : int
+        width of the board
+    height : int
+        height of the board
+    size : int
+        size of the board
+    genSquares: bool
+        if true, starts generating squares
+
+    """
+    def __init__(self, width: int, height: int, size: int = 6, genSquares: bool = True):
+        """
+        Constructs all the necessary attributes for the board object.
+
+        Parameters
+        ----------
+        width : int
+            width of the board
+        height : int
+            height of the board
+        size : int
+            size of the board
+        genSquares: bool
+            if true, starts generating squares
+
+        """
         self.width = width
         self.height = height
-        self.gap = gap
         self.size = size
         self.selectedPiece = None
         self.turn = False #true means black's turn
@@ -18,15 +46,21 @@ class Board():
 
 
     def boardCalc(self) -> list:
-        """Calculates the square coordinates and sizes. Returns list containing coordinates, respect to width and height, and location."""
+        '''
+        Calculates the square coordinates and sizes. Returns list containing coordinates, respect to width and height, and location.
+
+            Returns:
+                    coordinate (list): Contains x,y coordinate and location for each square (x,y(location))
+        '''
+        
         coordinate = []
         
         self.increment_h = int(self.height/self.size)
         self.increment_w = int(self.width/self.size)
     
-        y = self.gap
+        y = 0
         for i in range(self.size):
-            x = self.gap
+            x = 0
             for j in range(self.size):
                 coordinate.append((x,y,(i,j)))#location(y,x)
                 x+=self.increment_w
@@ -34,7 +68,12 @@ class Board():
         return coordinate
 
     def genSquares(self) -> list:
-        """Generates squares based on boardCalc() return. Returns lists within list containing Square objects."""
+        '''
+        Generates squares based on boardCalc() return. Returns lists within list containing Square objects.
+
+            Returns:
+                    squares (list): Contains Square objects.
+        '''
         squares = []
         coordinates = self.boardCalc()
         
@@ -42,12 +81,21 @@ class Board():
             if j%self.size==0:
                 squares.append([])
 
-            squares[-1].append(Square(coordinate[0],coordinate[1],self.increment_w-2*self.gap,self.increment_h-2*self.gap,coordinate[2]))
+            squares[-1].append(Square(coordinate[0],coordinate[1],self.increment_w,self.increment_h,coordinate[2]))
 
         return squares
     
-    def getSquare(self,mx,my) -> Square:
-        """Returns Square object based on mouse coordinates."""
+    def getSquare(self,mx: int, my: int) -> Square:
+        '''
+            Returns Square object based on mouse coordinates.
+
+            Parameters:
+                    mx (int): x coordinate
+                    my (int): y coordinate
+
+            Returns:
+                    square (Square): square object.
+         '''
         y = my//self.increment_h
         x = mx//self.increment_w
         return self.squares[y][x]
