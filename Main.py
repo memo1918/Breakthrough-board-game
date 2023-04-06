@@ -2,21 +2,13 @@ import pygame
 from Classes.Board import Board
 from Classes.Button import Button
 from Classes.Computer import Computer
-import sys
-
-pygame.init()
-
-screenSize = 720
-clock = pygame.time.Clock()
-clock.tick(30)
-screen = pygame.display.set_mode((screenSize, screenSize))
-
-font = pygame.font.SysFont("arialblack", 40)
+import sys,getopt
 
 def play(turn):
     """Function that runs the game."""
 
-    board = Board(screenSize,screenSize,size = 6)#size can be modified
+    board = Board(resolution,resolution,size)#size can be modified
+    board.depth = depth
     board.startPos()
     computer = Computer(board)
     if turn == "first":
@@ -135,4 +127,25 @@ def main_menu():
 
         pygame.display.update()
 
-main_menu()
+if __name__ == "__main__":
+    pygame.init()
+    resolution = 720
+    size = 6
+    depth = 3
+
+    argv = sys.argv[1:]
+    opts, args = getopt.getopt(argv, "r:s:d:", ["resolution =","size =","depth ="])
+    for opt, arg in opts:
+        if opt in ['-r','--resolution']:
+            resolution = int(arg)
+        if opt in ['-s','--size']:
+            size = int(arg)
+        if opt in ['-d','--depth']:
+            depth = int(arg)
+
+    clock = pygame.time.Clock()
+    clock.tick(30)
+    screen = pygame.display.set_mode((resolution, resolution))
+    font = pygame.font.SysFont("arialblack", 40)
+
+    main_menu()
