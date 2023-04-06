@@ -50,12 +50,12 @@ def about():
     def text_seperator(text,x,y)->list:
         """Function that seperates the text by lines and return a list"""
         lines = []
-        text_font = pygame.font.SysFont("arialblack", 20)
+        text_font = pygame.font.SysFont("arialblack", fontSize//2)
         for line in text.splitlines():
             text = text_font.render(line, True, "#b68f40")
             rect = text.get_rect(center=(x, y))
             lines.append([text,rect])
-            y+=40
+            y+=fontSize
         return lines
 
     while True:
@@ -70,9 +70,9 @@ def about():
         The game ends if one player reaches opponent's home row.
         \n\n Made by Mehmet Sahin Uces"""
 
-        back_button = Button(image=None, pos=(360, 550), text_input="BACK", font=font, base_color="#d7fcd4", hovering_color="White")
+        back_button = Button(image=None, pos=(centerY, (spacesX)*5), text_input="BACK", font=font, base_color="#d7fcd4", hovering_color="White")
 
-        for i in text_seperator(text,330,100):
+        for i in text_seperator(text,centerY//1.1,fontSize):
             screen.blit(i[0], i[1])
 
         back_button.changeColor(mouse_pos)
@@ -97,12 +97,12 @@ def main_menu():
         mouse_pos = pygame.mouse.get_pos()
 
         menu_text = font.render("MAIN MENU", True, "#b68f40")
-        menu_rect = menu_text.get_rect(center=(360, 100))
+        menu_rect = menu_text.get_rect(center=(centerY, spacesX))
 
-        first_button = Button(image=None, pos=(360, 200), text_input="FIRST TURN", font=font, base_color="#d7fcd4", hovering_color="White")
-        second_button = Button(image=None, pos=(360, 300), text_input="SECOND TURN", font=font, base_color="#d7fcd4", hovering_color="White")
-        about_button = Button(image=None, pos=(360, 400), text_input="HOW TO PLAY", font=font, base_color="#d7fcd4", hovering_color="White")
-        quit_button = Button(image=None, pos=(360, 500), text_input="QUIT", font=font, base_color="#d7fcd4", hovering_color="White")
+        first_button = Button(image=None, pos=(centerY, (spacesX)*2), text_input="FIRST TURN", font=font, base_color="#d7fcd4", hovering_color="White")
+        second_button = Button(image=None, pos=(centerY, (spacesX)*3), text_input="SECOND TURN", font=font, base_color="#d7fcd4", hovering_color="White")
+        about_button = Button(image=None, pos=(centerY, (spacesX)*4), text_input="HOW TO PLAY", font=font, base_color="#d7fcd4", hovering_color="White")
+        quit_button = Button(image=None, pos=(centerY, (spacesX)*5), text_input="QUIT", font=font, base_color="#d7fcd4", hovering_color="White")
 
         screen.blit(menu_text, menu_rect)
 
@@ -139,13 +139,17 @@ if __name__ == "__main__":
         if opt in ['-r','--resolution']:
             resolution = int(arg)
         if opt in ['-s','--size']:
-            size = int(arg)
+            size = int(arg) if int(arg)>3 else 6
         if opt in ['-d','--depth']:
-            depth = int(arg)
+            depth = int(arg) if int(arg)>0 else 3
+
+    centerY = resolution//2 #gets the center Y value
+    spacesX = resolution//6 #gets the optimal spaces between buttons
+    fontSize = resolution//18
 
     clock = pygame.time.Clock()
     clock.tick(30)
     screen = pygame.display.set_mode((resolution, resolution))
-    font = pygame.font.SysFont("arialblack", 40)
+    font = pygame.font.SysFont("arialblack", fontSize)
 
     main_menu()
