@@ -4,7 +4,7 @@ from Classes.Button import Button
 from Classes.Computer import Computer
 import sys,getopt
 
-def play(turn):
+def play(turn: str):
     """Function that runs the game."""
 
     board = Board(resolution,resolution,size)#size can be modified

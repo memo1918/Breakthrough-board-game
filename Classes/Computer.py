@@ -133,7 +133,7 @@ class Computer():
                     temp.occupiedPiece = Piece(square.occupiedPiece.isBlack,square.occupiedPiece.location)
                 copySquares[-1].append(temp)
         
-        copyBoard = Board(board.width,board.height,board.size,board.gap,genSquares=False)
+        copyBoard = Board(board.width,board.height,board.size,genSquares=False)
         copyBoard.turn = board.turn
         copyBoard.squares = copySquares
         return copyBoard
