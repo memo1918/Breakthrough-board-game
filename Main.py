@@ -1,21 +1,21 @@
 import pygame
 from Classes.Board import Board
 from Classes.Button import Button
-import sys
+from Classes.Computer import Computer
+import sys,getopt
 
-pygame.init()
-
-screenSize = 720
-clock = pygame.time.Clock()
-clock.tick(30)
-screen = pygame.display.set_mode((screenSize, screenSize))
-font = pygame.font.SysFont("arialblack", 40)
-
-def play():
+def play(turn):
     """Function that runs the game."""
 
-    board = Board(720,720)
-    board.startPos()        
+    board = Board(resolution,resolution,size)#size can be modified
+    board.depth = depth
+    board.startPos()
+    computer = Computer(board)
+    if turn == "first":
+        board.turn = False
+    else:
+        board.turn = True      
+    
     while True:
         screen.fill((0))
         mx, my = pygame.mouse.get_pos()
@@ -30,27 +30,32 @@ def play():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     main_menu()
+                    break
         
+        if board.turn == True:
+            board.computerMove(computer)
+
         board.draw(screen)
 
+        pygame.display.update()
+        
         result =board.isWin()
         if result != False:
             print(result,"Wins!!")
+            pygame.time.delay(1000)
             break
-
-        pygame.display.update()
 
 def about():
     """Function that runs about/how to play page"""
     def text_seperator(text,x,y)->list:
         """Function that seperates the text by lines and return a list"""
         lines = []
-        text_font = pygame.font.SysFont("arialblack", 20)
+        text_font = pygame.font.SysFont("arialblack", fontSize//2)
         for line in text.splitlines():
             text = text_font.render(line, True, "#b68f40")
             rect = text.get_rect(center=(x, y))
             lines.append([text,rect])
-            y+=40
+            y+=fontSize
         return lines
 
     while True:
@@ -65,9 +70,9 @@ def about():
         The game ends if one player reaches opponent's home row.
         \n\n Made by Mehmet Sahin Uces"""
 
-        back_button = Button(image=None, pos=(360, 550), text_input="BACK", font=font, base_color="#d7fcd4", hovering_color="White")
+        back_button = Button(image=None, pos=(centerY, (spacesX)*5), text_input="BACK", font=font, base_color="#d7fcd4", hovering_color="White")
 
-        for i in text_seperator(text,330,100):
+        for i in text_seperator(text,centerY//1.1,fontSize):
             screen.blit(i[0], i[1])
 
         back_button.changeColor(mouse_pos)
@@ -92,15 +97,16 @@ def main_menu():
         mouse_pos = pygame.mouse.get_pos()
 
         menu_text = font.render("MAIN MENU", True, "#b68f40")
-        menu_rect = menu_text.get_rect(center=(360, 100))
+        menu_rect = menu_text.get_rect(center=(centerY, spacesX))
 
-        play_button = Button(image=None, pos=(360, 250), text_input="PLAY", font=font, base_color="#d7fcd4", hovering_color="White")
-        about_button = Button(image=None, pos=(360, 400), text_input="HOW TO PLAY", font=font, base_color="#d7fcd4", hovering_color="White")
-        quit_button = Button(image=None, pos=(360, 550), text_input="QUIT", font=font, base_color="#d7fcd4", hovering_color="White")
+        first_button = Button(image=None, pos=(centerY, (spacesX)*2), text_input="FIRST TURN", font=font, base_color="#d7fcd4", hovering_color="White")
+        second_button = Button(image=None, pos=(centerY, (spacesX)*3), text_input="SECOND TURN", font=font, base_color="#d7fcd4", hovering_color="White")
+        about_button = Button(image=None, pos=(centerY, (spacesX)*4), text_input="HOW TO PLAY", font=font, base_color="#d7fcd4", hovering_color="White")
+        quit_button = Button(image=None, pos=(centerY, (spacesX)*5), text_input="QUIT", font=font, base_color="#d7fcd4", hovering_color="White")
 
         screen.blit(menu_text, menu_rect)
 
-        for button in [play_button,about_button, quit_button]:
+        for button in [first_button,second_button,about_button, quit_button]:
             button.changeColor(mouse_pos)
             button.update(screen)
         
@@ -109,8 +115,10 @@ def main_menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if play_button.checkForInput(mouse_pos):
-                    play()
+                if first_button.checkForInput(mouse_pos):
+                    play("first")
+                if second_button.checkForInput(mouse_pos):
+                    play("second")
                 if about_button.checkForInput(mouse_pos):
                     about()
                 if quit_button.checkForInput(mouse_pos):
@@ -119,4 +127,29 @@ def main_menu():
 
         pygame.display.update()
 
-main_menu()
+if __name__ == "__main__":
+    pygame.init()
+    resolution = 720
+    size = 6
+    depth = 3
+
+    argv = sys.argv[1:]
+    opts, args = getopt.getopt(argv, "r:s:d:", ["resolution =","size =","depth ="])
+    for opt, arg in opts:
+        if opt in ['-r','--resolution']:
+            resolution = int(arg)
+        if opt in ['-s','--size']:
+            size = int(arg) if int(arg)>3 else 6
+        if opt in ['-d','--depth']:
+            depth = int(arg) if int(arg)>0 else 3
+
+    centerY = resolution//2 #gets the center Y value
+    spacesX = resolution//6 #gets the optimal spaces between buttons
+    fontSize = resolution//18
+
+    clock = pygame.time.Clock()
+    clock.tick(30)
+    screen = pygame.display.set_mode((resolution, resolution))
+    font = pygame.font.SysFont("arialblack", fontSize)
+
+    main_menu()
