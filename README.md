@@ -16,9 +16,21 @@ The game ends if one player reaches opponent's home row.
 
 ## How to run from code
 - Download the code from the top right corner of github.
-- Install python 3.11.0 if you don't have it already. (I am not sure about other versions)
+- Install python 3.11.0 if you don't have it already. [Download link](https://www.python.org/downloads/release/python-3110/) (I haven't test with other versions)
 - Install pygame module. You can do it by running the command below on a terminal.
 ```cmd
 pip install pygame
 ```
 - Run Main.py
+```cmd
+python Main.py
+```
+#### Optional arguments when running
+- ```-s | --size```: Changes the board size (defualt: 6)
+- ```-r | --resolution```: Changes the resolution,widht and height, of the game screen (defualt: 720)
+- ```-d | --depth```: Changes the algorithms search depth (defualt: 3)
+
+Example
+```cmd
+python Main.py -s 6 -r 720 -d 3
+```
