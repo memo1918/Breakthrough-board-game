@@ -28,7 +28,7 @@ class Board():
         for i in range(self.size):
             x = self.gap
             for j in range(self.size):
-                coordinate.append([x,y,[i,j]])#location(y,x)
+                coordinate.append((x,y,(i,j)))#location(y,x)
                 x+=self.increment_w
             y+=self.increment_h
         return coordinate
@@ -72,6 +72,7 @@ class Board():
                 square.draw(screen)
 
     def pieceUpdate(self):
+        """Updates the list blackPieces and whitePieces."""
         self.blackPieces = []
         self.whitePieces = []
 
@@ -118,8 +119,14 @@ class Board():
             if square.occupiedPiece != None:
                 if square.occupiedPiece.isBlack == True:
                     return "Black"     
+                
+        self.pieceUpdate()
+        if not self.blackPieces:return "White"
+        if not self.whitePieces:return "Black"
+
         return False
     
     def computerMove(self,computer):
+        """Starts the computer's turn."""
         self.pieceUpdate()
         computer.move(self.depth)

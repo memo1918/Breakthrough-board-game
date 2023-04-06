@@ -33,22 +33,20 @@ class Computer():
         piece = moveTuple[0]
         targetSquare = moveTuple[1]
 
-
         for key in movesDict:
             print("Piece Location: ",key[0].location," Score: ",movesDict[key]," Move Location: ",key[1].location," Made" if key[0]==piece and key[1]==targetSquare  else "")
         print("\n")
         
-
         piece.move(self.board,targetSquare)
 
     def score_move(self,copyBoard,move,piece,dept) -> int:
         """Returns the final score."""
         copyBoard.turn = True
         piece.move(copyBoard,move)
-        score = self.minmax(move,copyBoard,dept-1,False)
+        score = self.minmax(copyBoard,dept-1,False)
         return score
 
-    def minmax(self,square,board,depth,maximizingComputer) -> int:
+    def minmax(self,board,depth,maximizingComputer) -> int:
         """Min max algorithm."""
 
         if depth == 0:
@@ -73,7 +71,7 @@ class Computer():
                         nextnextPiece = nextnextBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
                         nextnextPiece.move(nextnextBoard,nextnextSquare)
                         
-                        value = max(value,self.minmax(nextnextSquare,nextnextBoard,depth-1,False))
+                        value = max(value,self.minmax(nextnextBoard,depth-1,False))
             return value 
         
         else:
@@ -87,7 +85,7 @@ class Computer():
                         nextnextPiece = nextnextBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
                         nextnextPiece.move(nextnextBoard,nextnextSquare)
                         
-                        value = min(value,self.minmax(nextnextSquare,nextnextBoard,depth-1,True))
+                        value = min(value,self.minmax(nextnextBoard,depth-1,True))
             return value 
 
     def heuristicFunction(self,board,depth) -> int:
@@ -97,6 +95,8 @@ class Computer():
         board.pieceUpdate()
         depth = depth if depth>0 else 1
 
+        #plus
+        score += len(board.blackPieces)*10
 
         for piece in board.blackPieces:
             if piece.location[0] == board.size-1:
@@ -106,48 +106,18 @@ class Computer():
             else:
                 score += piece.location[0]*10*depth
 
-        score += len(board.blackPieces)*10
-
-    
         #minus
         score -= len(board.whitePieces)*10
 
         for square in board.squares[0]:
             if square.occupiedPiece != None:
                 if not square.occupiedPiece.isBlack:
-                    score-= 9000
+                    score-= 10000*depth
 
         for square in board.squares[1]:
             if square.occupiedPiece != None:
                 if not square.occupiedPiece.isBlack:
                     score-= 200
-
-        # winpos = -1 if turn else 0
-        # oneMoreStep = -2 if turn else 1
-        # board.pieceUpdate()
-
-        # #plus
-        # for square in board.squares[winpos]:
-        #     if square.occupiedPiece != None:
-        #         if square.occupiedPiece.isBlack == turn:
-        #             score+=10000
-
-        # for square in board.squares[oneMoreStep]:
-        #     if square.occupiedPiece != None:
-        #         if square.occupiedPiece.isBlack == turn:
-        #             score+=20
-
-
-        # #minus
-        # for square in board.squares[0 if winpos==-1 else -1]:
-        #     if square.occupiedPiece != None:
-        #         if square.occupiedPiece.isBlack != turn:
-        #             score-=9000
-
-        # for square in board.squares[1 if oneMoreStep==-2 else -2]:
-        #     if square.occupiedPiece != None:
-        #         if square.occupiedPiece.isBlack != turn:
-        #             score-= 100
 
         return score
            
