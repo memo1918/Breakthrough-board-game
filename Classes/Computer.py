@@ -149,7 +149,6 @@ class Computer():
         #         if square.occupiedPiece.isBlack != turn:
         #             score-= 100
 
-        
         return score
            
     def getCopy(self,board) -> Board:

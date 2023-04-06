@@ -10,6 +10,7 @@ class Board():
         self.size = size
         self.selectedPiece = None
         self.turn = False #true means black's turn
+        self.depth = 3
 
         if genSquares:self.squares = self.genSquares()
         else: self.squares = None
@@ -121,4 +122,4 @@ class Board():
     
     def computerMove(self,computer):
         self.pieceUpdate()
-        computer.move(3)
+        computer.move(self.depth)
