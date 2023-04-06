@@ -112,6 +112,7 @@ class Board():
 
             Parameters:
                     mx (int): x coordinate
+                    
                     my (int): y coordinate
 
             Returns:
@@ -163,12 +164,13 @@ class Board():
                     else:
                         self.whitePieces.append(piece)
 
-    def click(self,mx,my) -> None:
+    def click(self, mx: int, my: int) -> None:
         '''
             Handels mouse click on the game window.
 
             Parameters:
                     mx (int): x coordinate
+                    
                     my (int): y coordinate
          '''
         
