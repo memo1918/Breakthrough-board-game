@@ -54,7 +54,7 @@ def winScreen(text) -> None:
     Runs the Win Screen
 
     Parameters:
-        text (str): stores who 
+        text (str): stores who won.
     """
     
     
