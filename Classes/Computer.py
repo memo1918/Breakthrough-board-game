@@ -111,11 +111,8 @@ class Computer():
 
         if depth == 0:
             return self.heuristicFunction(board,depth)
-        elif board.isWin() == "White":
+        elif board.isWin() != False:
             return self.heuristicFunction(board,depth)
-        elif board.isWin() == "Black":
-            return self.heuristicFunction(board,depth)
-
 
         nextBoard = self.getCopy(board)
         nextBoard.pieceUpdate()
