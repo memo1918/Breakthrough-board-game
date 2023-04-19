@@ -14,6 +14,13 @@ If the target position is empty, a piece can be moved one space forward or diago
 
 The game ends if one player reaches opponent's home row.
 
+## How to run from release
+- Go to [release page](https://github.com/memo1918/Breakthrough-board-game/releases)
+- Download the latest .zip (not the source code).
+- extract the zip and run the .exe
+
+Note: Windows might see the .exe file as a virus. This is beacuse it is not signed. If you don't want to turn off your firewall or simply trust, you can run from the source.
+
 ## How to run from source
 - Download the code from the top right corner of github. Code -> Download ZIP
 - Install python 3.11.0 if you don't have it already. [Download link](https://www.python.org/downloads/release/python-3110/) (I haven't test with other versions)
@@ -43,4 +50,8 @@ Note: Make sure file structure look like this
 Example
 ```cmd
 python Main.py -s 6 -r 720 -d 3
+```
+or if you have the executable
+```cmd
+Breakthrough.exe -s 6 -r 720 -d 3
 ```
