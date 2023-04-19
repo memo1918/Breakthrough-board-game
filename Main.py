@@ -46,9 +46,34 @@ def play(turn: str) -> None:
         
         result =board.isWin()
         if result != False:
-            print(result,"Wins!!")
-            pygame.time.delay(1000)
+            winScreen(result)
             break
+
+def winScreen(text) -> None:
+    while True:
+        screen.fill((0))
+        mouse_pos = pygame.mouse.get_pos()
+
+        back_button = Button(image=None, pos=(centerY, (spacesX)*5), text_input="BACK", font=font, base_color="#d7fcd4", hovering_color="White")
+
+        menu_text = font.render(f"{text} Wins", True, "#b68f40")
+        menu_rect = menu_text.get_rect(center=(centerY, spacesX))
+        screen.blit(menu_text, menu_rect)
+
+        back_button.changeColor(mouse_pos)
+        back_button.update(screen)
+    
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if back_button.checkForInput(mouse_pos):
+                    main_menu()
+                    break
+        pygame.display.update()
 
 def about() -> None:
     """
