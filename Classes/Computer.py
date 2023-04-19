@@ -60,9 +60,9 @@ class Computer():
         piece = moveTuple[0]
         targetSquare = moveTuple[1]
 
-        for key in movesDict:
-            print("Piece Location: ",key[0].location," Score: ",movesDict[key]," Move Location: ",key[1].location," Made" if key[0]==piece and key[1]==targetSquare  else "")
-        print("\n")
+        # for key in movesDict:
+        #     print("Piece Location: ",key[0].location," Score: ",movesDict[key]," Move Location: ",key[1].location," Made" if key[0]==piece and key[1]==targetSquare  else "")
+        # print("\n")
         
         piece.move(self.board,targetSquare)
 
