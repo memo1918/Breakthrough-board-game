@@ -50,6 +50,14 @@ def play(turn: str) -> None:
             break
 
 def winScreen(text) -> None:
+    """
+    Runs the Win Screen
+
+    Parameters:
+        text (str): stores who 
+    """
+    
+    
     while True:
         screen.fill((0))
         mouse_pos = pygame.mouse.get_pos()
