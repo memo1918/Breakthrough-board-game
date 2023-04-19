@@ -14,7 +14,7 @@ If the target position is empty, a piece can be moved one space forward or diago
 
 The game ends if one player reaches opponent's home row.
 
-## How to run from release
+## How to run from executable
 - Go to [release page](https://github.com/memo1918/Breakthrough-board-game/releases)
 - Download the latest .zip (not the source code).
 - extract the zip and run the .exe
