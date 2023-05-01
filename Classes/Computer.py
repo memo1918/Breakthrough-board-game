@@ -31,7 +31,6 @@ class Computer():
         """
 
         self.board = board
-        self.squares = self.board.squares
 
     def move(self, depth: int) -> None:
         """
@@ -52,10 +51,11 @@ class Computer():
                     copyPiece = copyBoard.squares[piece.location[0]][piece.location[1]].occupiedPiece
                     
                     score = self.score_move(copyBoard,copySquare,copyPiece,depth)
+                    
                     movesDict[(piece,move)] = score
         
-        max_cols = [key for key in movesDict.keys() if movesDict[key] == max(movesDict.values())]
 
+        max_cols = [key for key in movesDict.keys() if movesDict[key] == max(movesDict.values())]
         moveTuple = choice(max_cols)
         piece = moveTuple[0]
         targetSquare = moveTuple[1]
