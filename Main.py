@@ -2,9 +2,10 @@ import pygame
 from Classes.Board import Board
 from Classes.Button import Button
 from Classes.Computer import Computer
-import sys,getopt
+import sys
+import asyncio
 
-def play(turn: str) -> None:
+async def play(turn: str) -> None:
     """
     Function that runs the game.
 
@@ -34,8 +35,8 @@ def play(turn: str) -> None:
                     board.click(mx,my)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    main_menu()
-                    break
+                    await main_menu()
+                    return
         
         if board.turn == True:
             board.computerMove(computer)
@@ -46,10 +47,11 @@ def play(turn: str) -> None:
         
         result =board.isWin()
         if result != False:
-            winScreen(result)
-            break
+            await winScreen(result)
+            return
+        await asyncio.sleep(0)
 
-def winScreen(text) -> None:
+async def winScreen(text) -> None:
     """
     Runs the Win Screen
 
@@ -79,11 +81,12 @@ def winScreen(text) -> None:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.checkForInput(mouse_pos):
-                    main_menu()
-                    break
+                    await main_menu()
+                    return
         pygame.display.update()
+        await asyncio.sleep(0)
 
-def about() -> None:
+async def about() -> None:
     """
     Function that runs about/how to play page
     """
@@ -139,11 +142,12 @@ def about() -> None:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if back_button.checkForInput(mouse_pos):
-                    main_menu()
-                    break
+                    await main_menu()
+                    return
         pygame.display.update()
+        await asyncio.sleep(0)
 
-def main_menu() -> None:
+async def main_menu() -> None:
     """
     Function that runs Main Menu.
     """
@@ -173,16 +177,17 @@ def main_menu() -> None:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if first_button.checkForInput(mouse_pos):
-                    play("first")
+                    await play("first")
                 if second_button.checkForInput(mouse_pos):
-                    play("second")
+                    await play("second")
                 if about_button.checkForInput(mouse_pos):
-                    about()
+                    await about()
                 if quit_button.checkForInput(mouse_pos):
                     pygame.quit()
                     sys.exit()
 
         pygame.display.update()
+        await asyncio.sleep(0)
 
 
 if __name__ == "__main__":
@@ -190,16 +195,6 @@ if __name__ == "__main__":
     resolution = 720
     size = 6
     depth = 3
-
-    argv = sys.argv[1:]
-    opts, args = getopt.getopt(argv, "r:s:d:", ["resolution =","size =","depth ="])
-    for opt, arg in opts:
-        if opt in ['-r','--resolution']:
-            resolution = int(arg)
-        if opt in ['-s','--size']:
-            size = int(arg) if int(arg)>3 else 6
-        if opt in ['-d','--depth']:
-            depth = int(arg) if int(arg)>0 else 3
 
     centerY = resolution//2 #gets the center Y value
     spacesX = resolution//6 #gets the optimal spaces between buttons
@@ -210,4 +205,4 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((resolution, resolution))
     font = pygame.font.SysFont("arialblack", fontSize)
 
-    main_menu()
+    asyncio.run(main_menu())
