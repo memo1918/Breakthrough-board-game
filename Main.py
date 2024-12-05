@@ -163,11 +163,10 @@ async def main_menu() -> None:
         first_button = Button(image=None, pos=(centerY, (spacesX)*2), text_input="FIRST TURN", font=font, base_color="#d7fcd4", hovering_color="White")
         second_button = Button(image=None, pos=(centerY, (spacesX)*3), text_input="SECOND TURN", font=font, base_color="#d7fcd4", hovering_color="White")
         about_button = Button(image=None, pos=(centerY, (spacesX)*4), text_input="HOW TO PLAY", font=font, base_color="#d7fcd4", hovering_color="White")
-        quit_button = Button(image=None, pos=(centerY, (spacesX)*5), text_input="QUIT", font=font, base_color="#d7fcd4", hovering_color="White")
 
         screen.blit(menu_text, menu_rect)
 
-        for button in [first_button,second_button,about_button, quit_button]:
+        for button in [first_button,second_button,about_button]:
             button.changeColor(mouse_pos)
             button.update(screen)
         
@@ -182,9 +181,6 @@ async def main_menu() -> None:
                     await play("second")
                 if about_button.checkForInput(mouse_pos):
                     await about()
-                if quit_button.checkForInput(mouse_pos):
-                    pygame.quit()
-                    sys.exit()
 
         pygame.display.update()
         await asyncio.sleep(0)
